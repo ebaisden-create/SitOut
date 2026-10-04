@@ -16,11 +16,11 @@ Every sign-up goes through these checks, in this order:
 | Size limit | Requests over 2 KB are rejected. |
 | Rate limit, per visitor | 5 tries per 10 minutes and 20 per day from one connection. IPs are stored only as a scrambled hash and deleted after 24 hours. |
 | Rate limit, whole site | 60 tries per minute across everyone. Anything above that is turned away before it touches the list. |
-| Captcha | Cloudflare Turnstile, verified on the server. **If the captcha isn't set up, sign-ups stay off.** |
+| Human check | Invisible proof of work: the browser solves a small puzzle from the server (about 1 to 3 seconds, while the visitor types). Each puzzle is signed, expires in 10 minutes and works once. No third-party captcha and nothing to click. |
 | Hard caps | Free spots can never go past 500 (sign-ups are processed one at a time). The list stops at 50,000 emails. Rate-limit records are pruned daily. |
 | Locked database | Visitors can't read, change or delete anything. Re-entering an email never reveals whether it's already on the list. |
 
-What this can't fully stop: someone using many real email addresses, many internet connections and a captcha-solving service could still add some fake sign-ups, slowly. The caps mean they can never crash or fill the database. Before launch, skim the list for obvious junk. Sending a confirmation email is the next upgrade if you need it.
+What this can't fully stop: someone with many real email addresses, many internet connections and computing time to burn could still add some fake sign-ups, slowly. The caps mean they can never crash or fill the database. Before launch, skim the list for obvious junk. Sending a confirmation email is the next upgrade if you need it.
 
 ## Setup (about 20 minutes)
 
@@ -29,13 +29,8 @@ The code lives at github.com/ebaisden-create/SitOut. GitHub Pages deploys it wit
 
 Until the domain is connected, the site is at `https://ebaisden-create.github.io/SitOut/`.
 
-### 3. Turn on the captcha (sign-ups stay off until you do this)
-1. In the Cloudflare dashboard (a free account works), go to **Turnstile → Add widget**.
-   - Hostnames: `ebaisden-create.github.io` and `getsitout.com`.
-   - Widget mode: **Managed**.
-2. Copy the **Site Key** into `config.js` as `turnstileSiteKey`, then commit and push.
-3. Copy the **Secret Key** into Supabase under **Project sitout → Edge Functions → Secrets**, as `TURNSTILE_SECRET`.
-4. Optional: add a secret `IP_HASH_SALT` set to any long random string.
+### 3. Human check (done)
+Built in, nothing to set up. To make the puzzle harder, add a Supabase secret `POW_MAXNUMBER` (default 75000; higher means more work per sign-up).
 
 ### 4. Finish the setup
 - **Remove the test sign-up:** in Supabase **SQL Editor**, run:
@@ -59,7 +54,7 @@ select spot, email, monthly_loss, created_at from public.waitlist order by creat
 
 ## Files
 - `index.html`, `privacy.html`, `config.js`, `assets/`: the site
-- `supabase/migrations/`: database tables and functions (already applied)
+- `supabase/migrations/`: database tables and functions, including the proof-of-work check (already applied)
 - `supabase/functions/waitlist/index.ts`: the sign-up function (already deployed)
 - `.github/workflows/pages.yml`: deploys to GitHub Pages
 
