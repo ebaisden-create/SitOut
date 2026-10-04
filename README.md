@@ -1,6 +1,6 @@
 # SitOut
 
-The landing page for SitOut, the app for quitting sports betting. It collects emails, and the first 500 sign-ups get SitOut free for life.
+The landing page for SitOut, the app for quitting sports betting. It collects emails, and the first 250 sign-ups get SitOut free for life.
 
 - **Site:** plain HTML, CSS and JS, with animations from [Motion](https://motion.dev) (bundled in `assets/motion.min.js`, no build step). It's hosted free on GitHub Pages.
 - **Backend:** the Supabase project **sitout**. One edge function (`waitlist`) handles every sign-up. Visitors can't read or write the database directly.
@@ -17,7 +17,7 @@ Every sign-up goes through these checks, in this order:
 | Rate limit, per visitor | 5 tries per 10 minutes and 20 per day from one connection. IPs are stored only as a scrambled hash and deleted after 24 hours. |
 | Rate limit, whole site | 60 tries per minute across everyone. Anything above that is turned away before it touches the list. |
 | Human check | Invisible proof of work: the browser solves a small puzzle from the server (about 1 to 3 seconds, while the visitor types). Each puzzle is signed, expires in 10 minutes and works once. No third-party captcha and nothing to click. |
-| Hard caps | Free spots can never go past 500 (sign-ups are processed one at a time). The list stops at 50,000 emails. Rate-limit records are pruned daily. |
+| Hard caps | Free spots can never go past 250 (sign-ups are processed one at a time). The list stops at 50,000 emails. Rate-limit records are pruned daily. |
 | Locked database | Visitors can't read, change or delete anything. Re-entering an email never reveals whether it's already on the list. |
 
 What this can't fully stop: someone with many real email addresses, many internet connections and computing time to burn could still add some fake sign-ups, slowly. The caps mean they can never crash or fill the database. Before launch, skim the list for obvious junk. Sending a confirmation email is the next upgrade if you need it.
@@ -58,4 +58,4 @@ select spot, email, monthly_loss, created_at from public.waitlist order by creat
 - `supabase/functions/waitlist/index.ts`: the sign-up function (already deployed)
 - `.github/workflows/pages.yml`: deploys to GitHub Pages
 
-Struggling right now? Call or text 1-800-GAMBLER, free and 24/7.
+Struggling right now? Call or text 1-800-MY-RESET (1-800-697-3738), free and 24/7.

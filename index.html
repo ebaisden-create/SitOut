@@ -1,98 +1,181 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>SitOut: Quit Sports Betting</title>
-  <meta name="description" content="SitOut blocks every sportsbook on your phone, gets you through the urge, and shows the money you've kept. The first 500 people get it free.">
+  <meta name="description" content="SitOut blocks every sportsbook on your phone, gets you through the urge, and shows the money you've kept. The first 250 people get it free.">
   <meta name="theme-color" content="#0A110E">
   <meta property="og:title" content="SitOut: Sit this one out.">
-  <meta property="og:description" content="The app that switches off the sportsbook. First 500 sign-ups get it free.">
+  <meta property="og:description" content="The app that switches off the sportsbook. First 250 sign-ups get it free.">
   <meta property="og:image" content="assets/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/bricolage-grotesque-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/styles.css">
+  <script>document.documentElement.classList.replace("no-js","js");try{if(sessionStorage.getItem("sitout-intro"))document.documentElement.classList.add("seen")}catch(e){}</script>
   <script src="config.js"></script>
   <script src="assets/motion.min.js" defer></script>
   <script src="assets/app.js" defer></script>
 </head>
 <body>
-  <header class="top">
-    <a href="#" class="brand" aria-label="SitOut home"><img src="assets/logo.svg" alt="SitOut" height="34"></a>
-    <a href="#join" class="top-cta">Claim a free spot</a>
+  <!-- Brand intro: the switch clicks off, the wordmark lands, the page wipes in -->
+  <div id="intro" aria-hidden="true">
+    <div class="intro-switch"><span class="knob"></span></div>
+    <div class="intro-word"><span>s</span><span>i</span><span>t</span><span class="g">o</span><span class="g">u</span><span class="g">t</span></div>
+  </div>
+
+  <header class="nav" id="nav">
+    <a href="#" class="brand" aria-label="SitOut home"><img src="assets/logo.svg" alt="SitOut" height="30"></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#cost">The math</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#join" class="nav-cta">Claim a free spot</a>
   </header>
 
   <main>
     <section class="hero" id="join">
-      <div class="switch" aria-hidden="true"><span class="knob"></span></div>
-      <h1 class="headline"><span>Sit this one</span> <em>out.</em></h1>
-      <p class="lede">SitOut blocks every sportsbook on your phone, gets you through the urge in 60 seconds, and shows the money you've kept stacking up.</p>
+      <div class="hero-copy">
+        <p class="eyebrow reveal"><span class="pulse"></span>Coming to iPhone · Founding list open</p>
+        <h1 class="headline">
+          <span class="line"><span class="word">Sit</span> <span class="word">this</span></span>
+          <span class="line"><span class="word">one</span> <em class="word">out.</em></span>
+        </h1>
+        <p class="lede reveal">SitOut blocks every sportsbook on your phone, gets you through the urge in 60 seconds, and shows the money you've kept stacking up.</p>
 
-      <div class="founding" aria-live="polite">
-        <div class="founding-row">
-          <strong>First 500 sign-ups get SitOut free for life.</strong>
-          <span class="spots"><b id="spots">500</b> of 500 free spots left</span>
+        <div class="founding reveal" aria-live="polite">
+          <div class="founding-row">
+            <strong>First 250 sign-ups get SitOut free for life.</strong>
+            <span class="spots"><b id="spots">250</b> of 250 left</span>
+          </div>
+          <div class="bar"><i id="bar"></i></div>
         </div>
-        <div class="bar"><i id="bar"></i></div>
-      </div>
 
-      <form id="form" class="card" novalidate>
-        <label for="email" class="sr">Email address</label>
-        <div class="field">
-          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required maxlength="254">
-          <button id="submit" type="submit">Claim my free spot</button>
+        <form id="form" class="card form reveal" novalidate>
+          <label for="email" class="sr">Email address</label>
+          <div class="field">
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required maxlength="254">
+            <button id="submit" type="submit"><span class="btn-label">Claim my free spot</span><span class="btn-arrow" aria-hidden="true">→</span></button>
+          </div>
+          <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+          <p id="msg" class="msg" role="status"></p>
+          <p class="fine">One email when SitOut launches. No spam, never shared.</p>
+        </form>
+
+        <div id="done" class="card done" hidden>
+          <div class="mini-switch" aria-hidden="true"><span class="knob"></span></div>
+          <div>
+            <h2 id="done-title">You're in.</h2>
+            <p id="done-body"></p>
+          </div>
         </div>
-        <!-- honeypot: hidden from people, bots fill it -->
-        <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
-        <div id="captcha" class="captcha"></div>
-        <p id="msg" class="msg" role="status"></p>
-        <p class="fine">One email when SitOut launches on iPhone. No spam, and we never share your email.</p>
-      </form>
+      </div>
 
-      <div id="done" class="card done" hidden>
-        <div class="switch small off" aria-hidden="true"><span class="knob"></span></div>
-        <h2 id="done-title">You're in.</h2>
-        <p id="done-body"></p>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="glow"></div>
+        <div class="phone" id="phone">
+          <div class="island"></div>
+          <div class="screen">
+            <div class="status"><span>9:41</span><span class="status-icons"><i></i><i></i><i></i></span></div>
+            <div class="toast" id="toast">
+              <span class="toast-icon"><span class="knob"></span></span>
+              <span class="toast-text"><b>SitOut</b><span>Game day. Kickoff in 1 hr. You've got this.</span></span>
+            </div>
+            <p class="app-hello">Good evening</p>
+            <div class="ring-card">
+              <svg viewBox="0 0 120 120" class="ring">
+                <circle cx="60" cy="60" r="50" class="ring-bg"/>
+                <circle cx="60" cy="60" r="50" class="ring-fg" id="ring"/>
+              </svg>
+              <div class="ring-label"><b id="streak">0</b><span>days bet-free</span></div>
+            </div>
+            <div class="kept-card">
+              <span>Kept so far</span>
+              <b>+$<span id="kept">0</span></b>
+              <svg viewBox="0 0 120 32" class="spark"><path id="spark" d="M2 28 L18 25 L32 26 L46 20 L60 21 L74 14 L88 15 L102 8 L118 4"/></svg>
+            </div>
+            <div class="shield-card">
+              <div class="shield-top"><span class="mini-switch on"><span class="knob"></span></span><span><b>Sportsbook blocked</b><small>Tried to open at 11:52 PM</small></span></div>
+              <div class="shield-btn">Breathe for 60 seconds</div>
+            </div>
+            <div class="tabbar"><i class="on"></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="calc" aria-labelledby="calc-h">
-      <h2 id="calc-h">What's it costing you?</h2>
-      <label for="loss" class="calc-label">I lose about <output id="loss-out">$200</output> a month</label>
-      <input id="loss" type="range" min="0" max="2000" step="25" value="200">
-      <div class="calc-result">
-        <div><span>A year</span><b id="yr">$2,400</b></div>
-        <div><span>5 years</span><b id="fy">$12,000</b></div>
+    <div class="ticker" aria-label="Betting math">
+      <div class="track">
+        <span>52.4% win rate just to break even</span><span>4-leg parlay: 1 in 16</span><span>$20 a day = $7,300 a year</span><span>Free for the first 250</span><span>Sit this one out.</span>
+        <span aria-hidden="true">52.4% win rate just to break even</span><span aria-hidden="true">4-leg parlay: 1 in 16</span><span aria-hidden="true">$20 a day = $7,300 a year</span><span aria-hidden="true">Free for the first 250</span><span aria-hidden="true">Sit this one out.</span>
       </div>
-      <p class="fine">Just the math on your number. Nothing is saved unless you sign up.</p>
+    </div>
+
+    <section class="features" id="how">
+      <p class="kicker reveal-on-scroll">How it works</p>
+      <h2 class="section-title reveal-on-scroll">Built for the moment the urge hits.</h2>
+      <div class="cards">
+        <article class="feature reveal-on-scroll">
+          <svg class="icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="9" width="24" height="14" rx="7"/><circle cx="11" cy="16" r="4"/></svg>
+          <h3>The sportsbook won't open</h3>
+          <p>Pick the betting apps. SitOut blocks them, and when you try anyway you get a panic button instead of a bet slip.</p>
+        </article>
+        <article class="feature reveal-on-scroll">
+          <svg class="icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M16 9v7l4 3"/></svg>
+          <h3>A 60-second urge reset</h3>
+          <p>Name it, breathe, play it forward. Urges peak and pass. You just have to outlast this one.</p>
+        </article>
+        <article class="feature reveal-on-scroll">
+          <svg class="icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 24l7-7 5 4 10-11"/><path d="M21 10h6v6"/></svg>
+          <h3>Money kept, not money lost</h3>
+          <p>Your streak and the cash you didn't hand the book, counted up every day. Game-day alerts land before kickoff.</p>
+        </article>
+      </div>
     </section>
 
-    <section class="features">
-      <article>
-        <h3>The sportsbook won't open</h3>
-        <p>Pick the betting apps. SitOut blocks them, and when you try anyway you get a panic button instead of a bet slip.</p>
-      </article>
-      <article>
-        <h3>A 60-second urge reset</h3>
-        <p>Name it, breathe, play it forward. Urges peak and pass. You just have to outlast this one.</p>
-      </article>
-      <article>
-        <h3>Money kept, not money lost</h3>
-        <p>Your streak and the cash you didn't hand the book, counted up every day.</p>
-      </article>
+    <section class="calc" id="cost" aria-labelledby="calc-h">
+      <div class="calc-copy reveal-on-scroll">
+        <p class="kicker">The math</p>
+        <h2 id="calc-h" class="section-title">What's it costing you?</h2>
+        <p class="sub">Drag to your number and see what it costs you, and what it could have grown into. Nothing is saved unless you sign up.</p>
+      </div>
+      <div class="calc-panel card reveal-on-scroll">
+        <label for="loss" class="calc-label">I lose about <output id="loss-out">$200</output> a month</label>
+        <input id="loss" type="range" min="0" max="2000" step="25" value="200">
+        <p class="calc-row-label">What you hand the book</p>
+        <div class="calc-result">
+          <div><span>A year</span><b id="yr">−$2,400</b></div>
+          <div><span>5 years</span><b id="fy">−$12,000</b></div>
+        </div>
+        <p class="calc-row-label">If you invested it instead*</p>
+        <div class="calc-result invest">
+          <div><span>In 5 years</span><b id="i5">+$15,487</b></div>
+          <div><span>In 10 years</span><b id="i10">+$40,969</b></div>
+        </div>
+        <p class="calc-note">*Same amount each month into an index fund at about 10% a year, the long-run historical average. Not guaranteed.</p>
+      </div>
     </section>
 
-    <section class="faq">
-      <h2>Questions</h2>
-      <details><summary>What does "free for life" mean?</summary><p>The first 500 people on this list get full access to SitOut at no cost, including after the paywall launches for everyone else.</p></details>
-      <details><summary>When does it launch?</summary><p>iPhone first. Everyone on the list gets one email the day it's ready.</p></details>
-      <details><summary>Is my email private?</summary><p>Yes. It's used only to tell you SitOut is live and send your free access. It's never sold or shared.</p></details>
+    <section class="faq" id="faq">
+      <h2 class="section-title reveal-on-scroll">Questions</h2>
+      <details class="reveal-on-scroll"><summary>What does "free for life" mean?</summary><p>The first 250 people on this list get full access to SitOut at no cost, including after the paywall launches for everyone else.</p></details>
+      <details class="reveal-on-scroll"><summary>When does it launch?</summary><p>iPhone first. Everyone on the list gets one email the day it's ready.</p></details>
+      <details class="reveal-on-scroll"><summary>Is my email private?</summary><p>Yes. It's used only to tell you SitOut is live and send your free access. It's never sold or shared.</p></details>
+      <details class="reveal-on-scroll"><summary>Is this treatment?</summary><p>No. SitOut is a self-help tool. If you're struggling right now, call or text 1-800-MY-RESET, free and 24/7.</p></details>
+    </section>
+
+    <section class="final reveal-on-scroll">
+      <div class="mini-switch big" aria-hidden="true"><span class="knob"></span></div>
+      <h2>Day 1 starts now.</h2>
+      <a href="#join" class="final-cta">Claim a free spot <span aria-hidden="true">→</span></a>
     </section>
   </main>
 
   <footer>
-    <p class="help">Struggling right now? Call or text <a href="tel:18004262537">1-800-GAMBLER</a>, free and 24/7.</p>
+    <p class="help">Struggling right now? Call or text <a href="tel:18006973738">1-800-MY-RESET</a>, free and 24/7.</p>
     <p class="legal">SitOut is a self-help tool, not treatment. <a href="privacy.html">Privacy</a> · © 2026 SitOut</p>
   </footer>
 </body>
