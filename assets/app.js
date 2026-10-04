@@ -60,34 +60,42 @@
     $("#fy").textContent = fmt(v * 60);
   }
 
-  // ---- Captcha (Cloudflare Turnstile) ----
-  let token = "", widget = null;
-  function renderCaptcha() {
-    if (!cfg.turnstileSiteKey) return;
-    const s = document.createElement("script");
-    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-    s.async = true; s.defer = true;
-    s.onload = () => {
-      widget = window.turnstile.render("#captcha", {
-        sitekey: cfg.turnstileSiteKey, action: "waitlist", theme: "dark", appearance: "interaction-only",
-        callback: (t) => { token = t; },
-        "expired-callback": () => { token = ""; },
-        "error-callback": () => { token = ""; },
-      });
-    };
-    document.head.appendChild(s);
+  // ---- Invisible human check (proof of work) ----
+  // The browser solves a small puzzle from the server (about a second of work).
+  // Real visitors never see it; bots have to pay that cost for every sign-up.
+  let pow = null, powJob = null;
+  async function sha256hex(str) {
+    const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(b), (x) => x.toString(16).padStart(2, "0")).join("");
   }
-  function resetCaptcha() { token = ""; if (widget !== null && window.turnstile) window.turnstile.reset(widget); }
+  async function solvePow() {
+    const r = await fetch(cfg.apiUrl + "?challenge=1", { cache: "no-store" });
+    if (!r.ok) throw new Error("challenge");
+    const c = await r.json();
+    for (let n = 0; n <= c.maxnumber; n++) {
+      if ((await sha256hex(c.salt + n)) === c.challenge) {
+        return { salt: c.salt, number: n, challenge: c.challenge, signature: c.signature };
+      }
+      if (n % 2000 === 0) await new Promise((res) => setTimeout(res, 0)); // keep the page responsive
+    }
+    throw new Error("unsolved");
+  }
+  function startPow() {
+    if (!cfg.apiUrl || powJob) return powJob;
+    powJob = solvePow().then((p) => (pow = p)).catch(() => { powJob = null; pow = null; });
+    return powJob;
+  }
+  function resetPow() { pow = null; powJob = null; startPow(); }
 
   // ---- Form ----
   function say(text, kind) { const m = $("#msg"); m.textContent = text; m.className = "msg " + (kind || ""); }
   const ERR = {
     invalid_email: "That email doesn't look right. Check it and try again.",
-    captcha_required: "Finish the quick check below, then tap the button again.",
-    captcha_failed: "The quick check didn't go through. Try again.",
+    verification_required: "Still checking your connection. Tap the button again in a second.",
+    verification_failed: "The quick check didn't go through. Tap the button again.",
+    verification_expired: "That took a while, so we refreshed the check. Tap the button again.",
     ip_limited: "Too many tries from this connection. Wait about 10 minutes.",
     global_limited: "Lots of sign-ups right now. Try again in a minute.",
-    captcha_not_configured: "Sign-ups open soon. Check back shortly.",
     origin_not_allowed: "Sign-ups only work from the SitOut site.",
   };
   async function submit(e) {
@@ -95,19 +103,21 @@
     const email = $("#email").value.trim();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return say(ERR.invalid_email, "err");
     if (!cfg.apiUrl) return say("Sign-ups open soon. Check back shortly.", "err");
-    if (cfg.turnstileSiteKey && !token) return say(ERR.captcha_required, "err");
-    const btn = $("#submit"); btn.disabled = true; btn.textContent = "Saving your spot...";
+    const btn = $("#submit"); btn.disabled = true;
     say("");
+    if (!pow) { btn.textContent = "Checking you're human..."; startPow(); await powJob; }
+    if (!pow) { btn.disabled = false; btn.textContent = "Claim my free spot"; return say("Couldn't reach the server. Check your connection and try again.", "err"); }
+    btn.textContent = "Saving your spot...";
     try {
       const r = await fetch(cfg.apiUrl, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, token, website: $("#website").value, monthly_loss: lossTouched ? +$("#loss").value : null }),
+        body: JSON.stringify({ email, pow, website: $("#website").value, monthly_loss: lossTouched ? +$("#loss").value : null }),
       });
       const d = await r.json().catch(() => ({}));
-      if (!r.ok || d.error) { say(ERR[d.error] || "Something went wrong. Try again in a minute.", "err"); resetCaptcha(); return; }
+      if (!r.ok || d.error) { say(ERR[d.error] || "Something went wrong. Try again in a minute.", "err"); resetPow(); return; }
       done(d);
     } catch (_) {
-      say("Couldn't reach the server. Check your connection and try again.", "err"); resetCaptcha();
+      say("Couldn't reach the server. Check your connection and try again.", "err"); resetPow();
     } finally { btn.disabled = false; btn.textContent = "Claim my free spot"; }
   }
   function done(d) {
@@ -124,7 +134,7 @@
   }
 
   function start() {
-    intro(); calc(); loadSpots(); renderCaptcha();
+    intro(); calc(); loadSpots(); startPow();
     $("#loss").addEventListener("input", () => { lossTouched = true; calc(); });
     $("#form").addEventListener("submit", submit);
   }
