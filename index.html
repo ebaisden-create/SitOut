@@ -39,22 +39,14 @@
   <main>
     <section class="hero" id="join">
       <div class="hero-copy">
-        <p class="eyebrow reveal"><span class="pulse"></span>Coming to iPhone · Founding list open</p>
+        <p class="eyebrow reveal"><span class="pulse"></span>Coming to iPhone<span class="eb-extra"> · Founding list open</span></p>
         <h1 class="headline">
           <span class="line"><span class="word">Sit</span> <span class="word">this</span></span>
           <span class="line"><span class="word">one</span> <em class="word">out.</em></span>
         </h1>
         <p class="lede reveal">SitOut blocks every sportsbook on your phone, gets you through the urge in 60 seconds, and shows the money you've kept stacking up.</p>
 
-        <div class="founding reveal" aria-live="polite">
-          <div class="founding-row">
-            <strong>First 250 sign-ups get SitOut free for life.</strong>
-            <span class="spots"><b id="spots">250</b> of 250 left</span>
-          </div>
-          <div class="bar"><i id="bar"></i></div>
-        </div>
-
-        <form id="form" class="card form reveal" novalidate>
+        <form id="form" class="signup reveal" novalidate>
           <label for="email" class="sr">Email address</label>
           <div class="field">
             <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required maxlength="254">
@@ -62,8 +54,12 @@
           </div>
           <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
           <p id="msg" class="msg" role="status"></p>
-          <p class="fine">One email when SitOut launches. No spam, never shared.</p>
         </form>
+
+        <div class="founding reveal" aria-live="polite">
+          <span class="spots-pill"><span class="meter"><i id="bar"></i></span><span><b id="spots">250</b> of 250 free spots left</span></span>
+          <span class="founding-note" id="founding-note">First 250 sign-ups get SitOut free for life. One email at launch, no spam.</span>
+        </div>
 
         <div id="done" class="card done" hidden>
           <div class="mini-switch" aria-hidden="true"><span class="knob"></span></div>
