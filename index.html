@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SitOut: Quit Sports Betting</title>
+  <meta name="description" content="SitOut blocks every sportsbook on your phone, gets you through the urge, and shows the money you've kept. The first 500 people get it free.">
+  <meta name="theme-color" content="#0A110E">
+  <meta property="og:title" content="SitOut: Sit this one out.">
+  <meta property="og:description" content="The app that switches off the sportsbook. First 500 sign-ups get it free.">
+  <meta property="og:image" content="assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="config.js"></script>
+  <script src="assets/motion.min.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a href="#" class="brand" aria-label="SitOut home"><img src="assets/logo.svg" alt="SitOut" height="34"></a>
+    <a href="#join" class="top-cta">Claim a free spot</a>
+  </header>
+
+  <main>
+    <section class="hero" id="join">
+      <div class="switch" aria-hidden="true"><span class="knob"></span></div>
+      <h1 class="headline"><span>Sit this one</span> <em>out.</em></h1>
+      <p class="lede">SitOut blocks every sportsbook on your phone, gets you through the urge in 60 seconds, and shows the money you've kept stacking up.</p>
+
+      <div class="founding" aria-live="polite">
+        <div class="founding-row">
+          <strong>First 500 sign-ups get SitOut free for life.</strong>
+          <span class="spots"><b id="spots">500</b> of 500 free spots left</span>
+        </div>
+        <div class="bar"><i id="bar"></i></div>
+      </div>
+
+      <form id="form" class="card" novalidate>
+        <label for="email" class="sr">Email address</label>
+        <div class="field">
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required maxlength="254">
+          <button id="submit" type="submit">Claim my free spot</button>
+        </div>
+        <!-- honeypot: hidden from people, bots fill it -->
+        <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+        <div id="captcha" class="captcha"></div>
+        <p id="msg" class="msg" role="status"></p>
+        <p class="fine">One email when SitOut launches on iPhone. No spam, and we never share your email.</p>
+      </form>
+
+      <div id="done" class="card done" hidden>
+        <div class="switch small off" aria-hidden="true"><span class="knob"></span></div>
+        <h2 id="done-title">You're in.</h2>
+        <p id="done-body"></p>
+      </div>
+    </section>
+
+    <section class="calc" aria-labelledby="calc-h">
+      <h2 id="calc-h">What's it costing you?</h2>
+      <label for="loss" class="calc-label">I lose about <output id="loss-out">$200</output> a month</label>
+      <input id="loss" type="range" min="0" max="2000" step="25" value="200">
+      <div class="calc-result">
+        <div><span>A year</span><b id="yr">$2,400</b></div>
+        <div><span>5 years</span><b id="fy">$12,000</b></div>
+      </div>
+      <p class="fine">Just the math on your number. Nothing is saved unless you sign up.</p>
+    </section>
+
+    <section class="features">
+      <article>
+        <h3>The sportsbook won't open</h3>
+        <p>Pick the betting apps. SitOut blocks them, and when you try anyway you get a panic button instead of a bet slip.</p>
+      </article>
+      <article>
+        <h3>A 60-second urge reset</h3>
+        <p>Name it, breathe, play it forward. Urges peak and pass. You just have to outlast this one.</p>
+      </article>
+      <article>
+        <h3>Money kept, not money lost</h3>
+        <p>Your streak and the cash you didn't hand the book, counted up every day.</p>
+      </article>
+    </section>
+
+    <section class="faq">
+      <h2>Questions</h2>
+      <details><summary>What does "free for life" mean?</summary><p>The first 500 people on this list get full access to SitOut at no cost, including after the paywall launches for everyone else.</p></details>
+      <details><summary>When does it launch?</summary><p>iPhone first. Everyone on the list gets one email the day it's ready.</p></details>
+      <details><summary>Is my email private?</summary><p>Yes. It's used only to tell you SitOut is live and send your free access. It's never sold or shared.</p></details>
+    </section>
+  </main>
+
+  <footer>
+    <p class="help">Struggling right now? Call or text <a href="tel:18004262537">1-800-GAMBLER</a>, free and 24/7.</p>
+    <p class="legal">SitOut is a self-help tool, not treatment. <a href="privacy.html">Privacy</a> · © 2026 SitOut</p>
+  </footer>
+</body>
+</html>
