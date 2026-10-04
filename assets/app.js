@@ -203,6 +203,7 @@
     if (!animOK) showEverything();
     // Safety net: if the entrance never starts (blocked script, odd browser), show the page anyway.
     setTimeout(() => { if (!entranceStarted) { showEverything(); phoneDemo(0); } }, 4500);
+    setTimeout(() => { const i = $("#intro"); if (i) i.remove(); }, 6000); // the intro can never block the page
     intro(); scrollBits(); calc(); loadSpots(); startPow();
     $("#loss").addEventListener("input", () => { lossTouched = true; calc(); });
     $("#form").addEventListener("submit", submit);
