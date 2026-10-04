@@ -95,9 +95,9 @@
     if (animOK) M.animate(from, left, { duration: 1.2, ease: EASE, onUpdate: (v) => ($("#spots").textContent = Math.round(v)) });
     else $("#spots").textContent = left;
     const w = ((250 - left) / 250) * 100;
-    if (animOK) M.animate("#bar", { width: ["0%", Math.max(w, 1.5) + "%"] }, { duration: 1.2, delay: 0.4, ease: EASE });
+    if (animOK) M.animate("#bar", { width: ["0%", Math.max(w, 6) + "%"] }, { duration: 1.2, delay: 0.4, ease: EASE });
     else $("#bar").style.width = w + "%";
-    if (left === 0) $(".founding-row strong").textContent = "All 250 free spots are taken. Join for the founding price.";
+    if (left === 0) $("#founding-note").textContent = "All 250 free spots are taken. Join for the founding price.";
   }
   async function loadSpots() {
     if (!cfg.apiUrl) return;
